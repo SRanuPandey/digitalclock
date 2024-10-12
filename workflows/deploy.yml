@@ -3,7 +3,7 @@ name: Deploy Azure WebApp with Terraform
 on:
   push:
     branches:
-      - main
+      - feature_rel1
 
 env:
   ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
@@ -31,5 +31,5 @@ jobs:
     - name: Plan Terraform
       run: terraform plan
 
-    - name: Apply Terraform
-      run: terraform apply -auto-approve
+   # - name: Apply Terraform
+   #   run: terraform apply -auto-approve
