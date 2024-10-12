@@ -25,7 +25,10 @@ jobs:
     - name: Azure Login
       uses: azure/login@v1
       with:
-       creds: ${{ secrets.AZURE_CREDENTIALS }}  # Make sure this secret is defined in GitHub
+        client-id: ${{ secrets.ARM_CLIENT_ID }}
+        client-secret: ${{ secrets.ARM_CLIENT_SECRET }}
+        tenant-id: ${{ secrets.ARM_TENANT_ID }}
+        subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
 
 
     - name: Initialize Terraform
