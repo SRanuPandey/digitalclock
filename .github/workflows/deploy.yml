@@ -6,10 +6,10 @@ on:
       - feature_rel1
 
 env:
-  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+    client-id: ${{ secrets.CLIENT_ID }}
+    CLIENT-SECRET: ${{ secrets.CLIENT_SECRET }}
+    SUBSCRIPTION-ID: ${{ secrets.SUBSCRIPTION_ID }}
+    TENANT-ID: ${{ secrets.TENANT_ID }}
 
 jobs:
   deploy:
@@ -25,10 +25,10 @@ jobs:
     - name: Azure Login
       uses: azure/login@v1
       with:
-       ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-       ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-       ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+       client-id: ${{ secrets.CLIENT_ID }}
+       CLIENT-SECRET: ${{ secrets.CLIENT_SECRET }}
+       SUBSCRIPTION-ID: ${{ secrets.SUBSCRIPTION_ID }}
+       TENANT-ID: ${{ secrets.TENANT_ID }}
 
 
     - name: Initialize Terraform
@@ -45,4 +45,4 @@ jobs:
 
    # - name: Apply Terraform
   # working-directory: ./terraform 
-   #   run: terraform apply -auto-approve
+   #   run: terraform apply -auto-approve'
