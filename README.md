@@ -1,2 +1,2 @@
 # digitalclock
-digitalclock1
+digitalclock2
