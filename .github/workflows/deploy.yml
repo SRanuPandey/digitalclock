@@ -5,44 +5,43 @@ on:
     branches:
       - feature_rel1
 
-env:
-    client-id: ${{ secrets.CLIENT_ID }}
-    CLIENT-SECRET: ${{ secrets.CLIENT_SECRET }}
-    SUBSCRIPTION-ID: ${{ secrets.SUBSCRIPTION_ID }}
-    TENANT-ID: ${{ secrets.TENANT_ID }}
-
 jobs:
-  deploy:
+  terraform:
+    name: Terraform Deployment
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      # Step 1: Checkout the repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-    - name: Set up Terraform
-      uses: hashicorp/setup-terraform@v1
+      # Step 2: Set up Terraform
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0  # Specify the Terraform version to use
 
-    - name: Azure Login
-      uses: azure/login@v1
-      with:
-       client-id: ${{ secrets.CLIENT_ID }}
-       CLIENT-SECRET: ${{ secrets.CLIENT_SECRET }}
-       SUBSCRIPTION-ID: ${{ secrets.SUBSCRIPTION_ID }}
-       TENANT-ID: ${{ secrets.TENANT_ID }}
+      # Step 1: Azure Login using Service Principal
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.ARM_CLIENT_ID }}
+          client-secret: ${{ secrets.ARM_CLIENT_SECRET }}
+          tenant-id: ${{ secrets.ARM_TENANT_ID }}
+          subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
 
+  
+      - name: Terraform Init
+        working-directory: ./terraform  # Change this path to the location of your Terraform directory
+        run: terraform init
 
-    - name: Initialize Terraform
-      working-directory: ./terraform 
-      run: terraform init
+      # Step 5: Terraform Plan
+      - name: Terraform Plan
+        working-directory: ./terraform  # Change this path to the location of your Terraform directory
+        run: terraform plan
 
-    - name: Validate Terraform
-      working-directory: ./terraform 
-      run: terraform validate
+     # - name: Terraform Apply
+     #   working-directory: ./terraform  # Change this path to the location of your Terraform directory
+     #   run: terraform apply -auto-approve
 
-    - name: Plan Terraform
-      working-directory: ./terraform 
-      run: terraform plan
-
-   # - name: Apply Terraform
-  # working-directory: ./terraform 
-   #   run: terraform apply -auto-approve'
+     
