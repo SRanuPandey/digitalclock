@@ -41,7 +41,7 @@ jobs:
         working-directory: ./terraform
         run: |
           PLAN_NAME="tfplan-${GITHUB_RUN_ID}"  # Unique for each run
-          terraform plan -out=tfplan
+          terraform plan -out=$PLAN_NAME
           echo "PLAN_NAME=$PLAN_NAME" >> $GITHUB_ENV
 
       - name: Save Terraform Plan
@@ -84,9 +84,9 @@ jobs:
       - name: Apply Terraform Plan
         run: |
           PLAN_NAME="tfplan-${GITHUB_RUN_ID}"
-          echo "PLAN_NAME=tfplan"
-          echo "terraform apply -auto-approve tfplan"
-          terraform apply -auto-approve tfplan
+          echo "PLAN_NAME=$PLAN_NAME"
+          echo "terraform apply -auto-approve $PLAN_NAME"
+          terraform apply -auto-approve $PLAN_NAME
 
 
   
