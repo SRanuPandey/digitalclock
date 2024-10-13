@@ -24,7 +24,7 @@ resource "azurerm_public_ip" "agw_pip" {
   name                = "pip-agw-digiclock"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
 }
 # Network Security Group
 resource "azurerm_network_security_group" "nsg" {
