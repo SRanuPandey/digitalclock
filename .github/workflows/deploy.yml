@@ -72,7 +72,9 @@ jobs:
         with:
          name: terraform-plan
 
-
+      - name: Terraform Init
+        working-directory: ./terraform  # Change this path to the location of your Terraform directory
+        run: terraform init
       - name: Apply Terraform Plan
         run: |
           echo "Applying Terraform Plan: $PLAN_NAME"
