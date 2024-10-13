@@ -26,8 +26,6 @@ jobs:
         with:
           terraform_version: 1.5.0
 
-     
-
       - name: Terraform Init
         working-directory: ./terraform  # Change this path to the location of your Terraform directory
         run: terraform init
@@ -35,17 +33,22 @@ jobs:
       - name: Remove existing lock file
         run: rm -f .terraform.lock.hcl
 
-      # Step 5: Terraform Plan
-      - name: Terraform Plan
-        working-directory: ./terraform  # Change this path to the location of your Terraform directory
+      - name: Reinitialize Terraform
+        run: terraform init
+    
+      - name: Create a Unique Terraform Plan
+        id: create_plan
+        working-directory: ./terraform
         run: |
-          terraform plan -out=tfplan-${GITHUB_RUN_ID}
+          PLAN_NAME="tfplan-${GITHUB_RUN_ID}"  # Unique for each run
+          terraform plan -out=$PLAN_NAME
+          echo "PLAN_NAME=$PLAN_NAME" >> $GITHUB_ENV
 
       - name: Save Terraform Plan
         uses: actions/upload-artifact@v3
         with:
-          name: tfplan-${GITHUB_RUN_ID}
-          path: ./terraform/tfplan-${GITHUB_RUN_ID}
+          name: terraform-plan
+          path: tfplan-${GITHUB_RUN_ID}
 
   manual-approval:
     name: Manual Approval for Apply
@@ -70,10 +73,13 @@ jobs:
           terraform_version: 1.5.0
 
       - name: Download Terraform Plan
-        uses: actions/download-artifact@v3
-        with:
-          name: tfplan-${GITHUB_RUN_ID}
-
+        run: |
+            PLAN_NAME="tfplan-${GITHUB_RUN_ID}"  # Unique for each run
+            echo "Downloading Terraform plan: $PLAN_NAME"
+          uses: actions/download-artifact@v3
+          with:
+            name: terraform-plan
+  
       - name: Apply Terraform Plan
         run: terraform apply -auto-approve tfplan-${GITHUB_RUN_ID}
 
