@@ -33,13 +33,15 @@ jobs:
       # Step 5: Terraform Plan
       - name: Terraform Plan
         working-directory: ./terraform  # Change this path to the location of your Terraform directory
-        run: terraform plan -out=./terraform/tfplan
-      
+        run: |
+          terraform plan -out=tfplan
+          ls -l
+          
       - name: Save Terraform Plan
         uses: actions/upload-artifact@v3
         with:
           name: tfplan
-          path: ./terraform/tfplan
+          path: tfplan
 
   manual-approval:
     name: Manual Approval for Apply
@@ -69,7 +71,7 @@ jobs:
           name: tfplan
 
       - name: Apply Terraform Plan
-        run: terraform apply -auto-approve ./terraform/tfplan
+        run: terraform apply -auto-approve tfplan
 
 
   
