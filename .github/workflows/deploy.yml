@@ -76,7 +76,11 @@ jobs:
         uses: actions/download-artifact@v3
         with:
          name: terraform-plan
-  
+
+      - name: Terraform Init
+        working-directory: ./terraform  # Change this path to the location of your Terraform directory
+        run: terraform init
+
       - name: Apply Terraform Plan
         run: terraform apply -auto-approve $PLAN_NAME
 
