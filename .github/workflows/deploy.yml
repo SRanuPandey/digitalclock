@@ -73,12 +73,9 @@ jobs:
           terraform_version: 1.5.0
 
       - name: Download Terraform Plan
-        run: |
-            PLAN_NAME="tfplan-${GITHUB_RUN_ID}"  # Unique for each run
-            echo "Downloading Terraform plan: $PLAN_NAME"
-          uses: actions/download-artifact@v3
-          with:
-            name: terraform-plan
+        uses: actions/download-artifact@v3
+        with:
+         name: terraform-plan
   
       - name: Apply Terraform Plan
         run: terraform apply -auto-approve tfplan-${GITHUB_RUN_ID}
