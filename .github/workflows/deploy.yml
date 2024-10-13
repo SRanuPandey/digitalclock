@@ -32,17 +32,21 @@ jobs:
         working-directory: ./terraform  # Change this path to the location of your Terraform directory
         run: terraform init
 
+      - name: Remove existing lock file
+        run: rm -f .terraform.lock.hcl
+
       # Step 5: Terraform Plan
       - name: Terraform Plan
         working-directory: ./terraform  # Change this path to the location of your Terraform directory
         run: |
-          terraform plan -out=tfplan
+          PLAN_NAME="tfplan-${GITHUB_RUN_ID}"
+          terraform plan -out=$PLAN_NAME
 
       - name: Save Terraform Plan
         uses: actions/upload-artifact@v3
         with:
           name: tfplan
-          path: ./terraform/tfplan
+          path: ./terraform/$PLAN_NAME
 
   manual-approval:
     name: Manual Approval for Apply
