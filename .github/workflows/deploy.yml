@@ -31,9 +31,6 @@ jobs:
         working-directory: ./terraform  # Change this path to the location of your Terraform directory
         run: terraform init
 
-      - name: Remove existing lock file
-        run: rm -f ./terraform/.terraform.lock.hcl
-
       - name: Create a Unique Terraform Plan
         id: create_plan
         working-directory: ./terraform
