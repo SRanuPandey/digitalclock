@@ -78,7 +78,7 @@ jobs:
          name: terraform-plan
   
       - name: Apply Terraform Plan
-        run: terraform apply -auto-approve tfplan-${GITHUB_RUN_ID}
+        run: terraform apply -auto-approve $PLAN_NAME
 
 
   
