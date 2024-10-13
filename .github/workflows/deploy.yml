@@ -36,12 +36,12 @@ jobs:
         run: |
           terraform plan -out=tfplan
           ls -l
-          
+
       - name: Save Terraform Plan
         uses: actions/upload-artifact@v3
         with:
           name: tfplan
-          path: tfplan
+          path: ./terraform/
 
   manual-approval:
     name: Manual Approval for Apply
