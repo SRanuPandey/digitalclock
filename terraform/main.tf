@@ -1,3 +1,7 @@
+locals {
+  first_public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+wWK73dCr+jgQOAxNsHAnNNNMEMWOHYEccp6wJm2gotpr9katuF/ZAdou5AaW1C61slRkHRkpRRX9FA9CYBiitZgvCCz+3nWNN7l/Up54Zps/pHWGZLHNJZRYyAB6j5yVLMVHIHriY49d/GZTZVNB8GoJv9Gakwc/fuEZYYl4YDFiGMBP///TzlI4jhiJzjKnEvqPFki5p2ZRJqcbCiF4pJrxUQR/RXqVFQdbRLZgYfJ8xGB878RENq3yQ39d8dVOkq4edbkzwcUmwwwkYVPIoDGsYLaRHnG+To7FvMeyO7xDVQkMKzopTQV8AuKpyvpqu0a9pWOMaiCyDytO7GGN you@me.com"
+}
+
 # Resource Group
 resource "azurerm_resource_group" "rg" {
   name     = "rg-digiclock"
@@ -60,7 +64,11 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   sku                 = "Standard_DS1_v2"
   instances           = 2
   admin_username      = "azureuser"
-  admin_password      = "Password1234!"  # Ensure strong password
+  
+  admin_ssh_key {
+    username   = "adminuser"
+    public_key = local.first_public_key
+  }
 
   source_image_reference {
     publisher = "Canonical"
