@@ -6,21 +6,20 @@ on:
       - feature_rel1
 
 env:
-        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+
 jobs:
   terraform:
     name: Terraform Deployment
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Step 2: Set up Terraform
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
         with:
@@ -31,17 +30,14 @@ jobs:
         run: terraform init
 
       - name: Remove existing lock file
-        run: rm -f .terraform.lock.hcl
+        run: rm -f ./terraform/.terraform.lock.hcl
 
-      - name: Reinitialize Terraform
-        run: terraform init
-    
       - name: Create a Unique Terraform Plan
         id: create_plan
         working-directory: ./terraform
         run: |
           PLAN_NAME="tfplan-${GITHUB_RUN_ID}"  # Unique for each run
-          terraform plan -out=tfplan
+          terraform plan -out=$PLAN_NAME          # Save plan with the unique name
           echo "PLAN_NAME=$PLAN_NAME" >> $GITHUB_ENV
 
       - name: Save Terraform Plan
@@ -54,7 +50,7 @@ jobs:
     name: Manual Approval for Apply
     runs-on: ubuntu-latest
     needs: terraform
-    environment: dev  # Name of the GitHub environment requiring approval
+    environment: dev
     steps:
       - name: Wait for Approval
         run: echo "Waiting for manual approval before applying Terraform changes."
@@ -83,10 +79,5 @@ jobs:
 
       - name: Apply Terraform Plan
         run: |
-          PLAN_NAME="tfplan-${GITHUB_RUN_ID}"
-          echo "PLAN_NAME=tfplan"
-          echo "terraform apply -auto-approve tfplan"
-          terraform apply -auto-approve tfplan
-
-
-  
+          echo "Applying Terraform Plan: $PLAN_NAME"
+          terraform apply -auto-approve $PLAN_NAME  # Apply using the same plan name
