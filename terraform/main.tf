@@ -23,7 +23,13 @@ resource "azurerm_subnet" "subnet" {
   virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = ["10.0.1.0/24"]
 }
-
+# Public IP for Application Gateway
+resource "azurerm_public_ip" "agw_pip" {
+  name                = "pip-agw-digiclock"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  allocation_method   = "Dynamic"
+}
 # Network Security Group
 resource "azurerm_network_security_group" "nsg" {
   name                = "nsg-digiclock"
@@ -43,6 +49,11 @@ resource "azurerm_network_interface" "nic" {
     subnet_id                     = azurerm_subnet.subnet.id
     private_ip_address_allocation = "Dynamic"
   }
+}
+
+resource "azurerm_network_interface_security_group_association" "nisg" {
+  network_interface_id      = azurerm_network_interface.nic.id
+  network_security_group_id = azurerm_network_security_group.nsg.id
 }
 
 # VM Scale Set
@@ -81,13 +92,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   
 }
 
-# Public IP for Application Gateway
-resource "azurerm_public_ip" "agw_pip" {
-  name                = "pip-agw-digiclock"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  allocation_method   = "Static"
-}
+
 
 # Application Gateway
 # Application Gateway
