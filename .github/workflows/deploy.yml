@@ -22,7 +22,9 @@ jobs:
 
       # Step 2: Set up Terraform
       - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v2  
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
 
      
 
@@ -35,13 +37,12 @@ jobs:
         working-directory: ./terraform  # Change this path to the location of your Terraform directory
         run: |
           terraform plan -out=tfplan
-          ls -l
 
       - name: Save Terraform Plan
         uses: actions/upload-artifact@v3
         with:
           name: tfplan
-          path: ./terraform/
+          path: ./terraform/tfplan
 
   manual-approval:
     name: Manual Approval for Apply
