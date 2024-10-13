@@ -7,7 +7,7 @@ terraform {
   }
   required_version = ">= 1.0"
 }
-provider "azurerm" {
-  features {}
-   resource_provider_registrations = "none"
-}
+#provider "azurerm" {
+#  features {}
+#   resource_provider_registrations = "none"
+#}
