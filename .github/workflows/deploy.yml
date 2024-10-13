@@ -84,6 +84,8 @@ jobs:
       - name: Apply Terraform Plan
         run: |
           PLAN_NAME="tfplan-${GITHUB_RUN_ID}"
+          echo "PLAN_NAME=$PLAN_NAME"
+          echo "terraform apply -auto-approve $PLAN_NAME"
           terraform apply -auto-approve $PLAN_NAME
 
 
