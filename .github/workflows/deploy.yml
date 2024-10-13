@@ -48,7 +48,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: terraform-plan
-          path: tfplan-${GITHUB_RUN_ID}
+          path: ./terraform/"tfplan-${GITHUB_RUN_ID}"
 
   manual-approval:
     name: Manual Approval for Apply
