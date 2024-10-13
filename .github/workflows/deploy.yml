@@ -82,7 +82,9 @@ jobs:
         run: terraform init
 
       - name: Apply Terraform Plan
-        run: terraform apply -auto-approve $PLAN_NAME
+        run: |
+          PLAN_NAME="tfplan-${GITHUB_RUN_ID}"
+          terraform apply -auto-approve $PLAN_NAME
 
 
   
