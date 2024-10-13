@@ -1,17 +1,3 @@
-terraform {
-  required_providers {
-    azurerm = {
-      source = "hashicorp/azurerm"
-      version = "4.5.0"
-    }
-  }
-}
-
-provider "azurerm" {
-  features {}
-   resource_provider_registrations = "none"
-}
-
 # Resource Group
 resource "azurerm_resource_group" "rg" {
   name     = "rg-digiclock"
