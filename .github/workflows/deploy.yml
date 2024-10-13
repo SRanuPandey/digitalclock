@@ -19,18 +19,13 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
         with:
-          terraform_version: 1.5.0  # Specify the Terraform version to use
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-      # Step 1: Azure Login using Service Principal
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.ARM_CLIENT_ID }}
-          client-secret: ${{ secrets.ARM_CLIENT_SECRET }}
-          tenant-id: ${{ secrets.ARM_TENANT_ID }}
-          subscription-id: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+      
 
-  
+     
+
+
       - name: Terraform Init
         working-directory: ./terraform  # Change this path to the location of your Terraform directory
         run: terraform init

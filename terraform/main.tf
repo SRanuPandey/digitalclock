@@ -5,7 +5,7 @@ provider "azurerm" {
 # Resource Group
 resource "azurerm_resource_group" "rg" {
   name     = "rg-digiclock"
-  location = "EastUS"
+  location = "North Europe"
 }
 
 # Virtual Network
