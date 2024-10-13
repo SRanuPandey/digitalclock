@@ -39,14 +39,13 @@ jobs:
       - name: Terraform Plan
         working-directory: ./terraform  # Change this path to the location of your Terraform directory
         run: |
-          PLAN_NAME="tfplan-${GITHUB_RUN_ID}"
-          terraform plan -out=$PLAN_NAME
+          terraform plan -out=tfplan-${GITHUB_RUN_ID}
 
       - name: Save Terraform Plan
         uses: actions/upload-artifact@v3
         with:
-          name: tfplan
-          path: ./terraform/$PLAN_NAME
+          name: tfplan-${GITHUB_RUN_ID}
+          path: ./terraform/tfplan-${GITHUB_RUN_ID}
 
   manual-approval:
     name: Manual Approval for Apply
@@ -73,10 +72,10 @@ jobs:
       - name: Download Terraform Plan
         uses: actions/download-artifact@v3
         with:
-          name: tfplan
+          name: tfplan-${GITHUB_RUN_ID}
 
       - name: Apply Terraform Plan
-        run: terraform apply -auto-approve tfplan
+        run: terraform apply -auto-approve tfplan-${GITHUB_RUN_ID}
 
 
   
