@@ -89,7 +89,13 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   
 }
 
-
+#Dedicated Subnet for Application Gateway
+resource "azurerm_subnet" "appgw_subnet" {
+  name                 = "appgw-subnet"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefixes     = ["10.0.1.0/24"]  # Ensure this subnet doesn't overlap with others
+}
 
 # Application Gateway
 # Application Gateway
@@ -100,7 +106,7 @@ resource "azurerm_application_gateway" "appgw" {
 
   gateway_ip_configuration {
     name      = "appgw-ip-configuration"
-    subnet_id = azurerm_subnet.subnet.id
+    subnet_id = azurerm_subnet.appgw_subnet.id
   }
 
   frontend_port {
