@@ -24,7 +24,9 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.5.0
-
+      - name: Remove existing lock file
+        run: rm -f ./terraform/.terraform.lock.hcl
+        
       - name: Terraform Init
         working-directory: ./terraform  # Change this path to the location of your Terraform directory
         run: terraform init
