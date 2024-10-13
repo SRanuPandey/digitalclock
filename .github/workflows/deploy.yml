@@ -33,7 +33,7 @@ jobs:
       # Step 5: Terraform Plan
       - name: Terraform Plan
         working-directory: ./terraform  # Change this path to the location of your Terraform directory
-        run: terraform plan
+        run: terraform plan -out=tfplan
       
       - name: Save Terraform Plan
         uses: actions/upload-artifact@v3
