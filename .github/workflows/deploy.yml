@@ -30,7 +30,7 @@ jobs:
             cd $(pwd)/website
             zip -r static-website.zip index.html script.js style.css  # Create ZIP
             cp $(pwd)/static-website.zip ../terraform/static-website.zip
-            chmod 755 ./terraform/static-website.zip
+            chmod 755 ../terraform/static-website.zip
             cd ../terraform/
             echo "$(pwd)"
             ls
