@@ -30,6 +30,7 @@ jobs:
             cd $(pwd)/website
             zip -r static-website.zip index.html script.js style.css  # Create ZIP
             cp $(pwd)/website/static-website.zip ./terraform/static-website.zip
+            ls -la ../terraform
 
       - name: Set up Terraform  # Step to set up Terraform CLI
         uses: hashicorp/setup-terraform@v2  # HashiCorp's action to set up Terraform
