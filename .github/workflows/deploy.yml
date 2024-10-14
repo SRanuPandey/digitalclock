@@ -34,7 +34,6 @@ jobs:
             cd ../terraform/
             echo "$(pwd)"
             ls
-            - name: Set file permissions
             
       - name: Set up Terraform  # Step to set up Terraform CLI
         uses: hashicorp/setup-terraform@v2  # HashiCorp's action to set up Terraform
