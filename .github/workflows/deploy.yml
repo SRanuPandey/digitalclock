@@ -57,7 +57,7 @@ jobs:
         uses: hashicorp/setup-terraform@v2
       
       - name: Terraform Init
-        working-directory: ./terraform  # Change this path to the location of your Terraform directory
+        working-directory: ./terraform  
         run: terraform init
 
       - name: Validate Terraform
@@ -67,4 +67,7 @@ jobs:
       - name: Plan Terraform
         working-directory: ./terraform
         run: terraform plan
-    
+
+      - name: Apply Terraform
+        working-directory: ./terraform
+        run: terraform apply -auto-approve
