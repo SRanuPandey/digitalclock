@@ -24,13 +24,10 @@ jobs:
         # Step 3: Create a ZIP file from the static website content 
       - name: Prepare ZIP of Static Website
         run: |
-            echo pwd
+            echo "$(pwd)"
             cd ./digiclock  # Navigate to the folder with your website content
             zip -r static-website.zip index.html script.js style.css  # Create ZIP
-            ls -la
-            cp ./digiclock/static-website.zip ./terraform/static-website.zip
-            cd ./terraform
-            ls
+            ls -la ./digiclock
 
       - name: Set up Terraform  # Step to set up Terraform CLI
         uses: hashicorp/setup-terraform@v2  # HashiCorp's action to set up Terraform
