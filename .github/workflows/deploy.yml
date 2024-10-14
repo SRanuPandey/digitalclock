@@ -12,28 +12,45 @@ env:
   ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-
+  terraform:
+     name: Terraform Deployment
+     runs-on: ubuntu-latest
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-    - name: Set up Terraform
-      uses: hashicorp/setup-terraform@v1
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+      
+      - name: Terraform Init
+        working-directory: ./terraform  # Change this path to the location of your Terraform directory
+        run: terraform init
 
-    - name: Initialize Terraform
-      working-directory: ./terraform
-      run: terraform init
+      - name: Validate Terraform
+        working-directory: ./terraform
+        run: terraform validate
+  
+      - name: Plan Terraform
+        working-directory: ./terraform
+        run: terraform plan
+      
 
-    - name: Validate Terraform
-      working-directory: ./terraform
-      run: terraform validate
+  manual-approval:
+    name: Manual Approval for Apply
+    runs-on: ubuntu-latest
+    needs: terraform
+    environment: dev
+    steps:
+      - name: Wait for Approval
+        run: echo "Waiting for manual approval before applying Terraform changes."
 
-    - name: Plan Terraform
-      working-directory: ./terraform
-      run: terraform plan
-
-    - name: Apply Terraform
-      working-directory: ./terraform
-      run: terraform apply -auto-approve
+  apply:
+    name: Apply Terraform Plan
+    runs-on: ubuntu-latest
+    needs: manual-approval
+     
+    steps:
+       - name: Apply Terraform
+         working-directory: ./terraform
+         run: terraform apply -auto-approve
+    
