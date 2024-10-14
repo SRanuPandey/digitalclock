@@ -1,73 +1,72 @@
-name: Deploy Azure WebApp with Terraform
+name: Deploy Azure WebApp with Terraform  # Name of the GitHub Actions workflow
 
 on:
   push:
     branches:
-      - feature_rel1
+      - feature_rel1  # Triggers this workflow on a push to the 'feature_rel1' branch
 
-env:
-  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+env:  # Define environment variables used for authentication to Azure
+  ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}  # Azure Service Principal Client ID
+  ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}  # Azure Service Principal Secret
+  ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}  # Azure Subscription ID
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}  # Azure Tenant ID
 
 jobs:
   terraform:
-     name: Terraform Deployment
-     runs-on: ubuntu-latest
+     name: Terraform Deployment  # Name of the job
+     runs-on: ubuntu-latest  # The job runs on the latest Ubuntu environment provided by GitHub Actions
      steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+      - name: Checkout Code  # Step to check out the repository code
+        uses: actions/checkout@v3  # GitHub Action to check out the code from the repository
 
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v2
-      
-      - name: Terraform Init
-        working-directory: ./terraform  # Change this path to the location of your Terraform directory
-        run: terraform init
+      - name: Set up Terraform  # Step to set up Terraform CLI
+        uses: hashicorp/setup-terraform@v2  # HashiCorp's action to set up Terraform
 
-      - name: Validate Terraform
-        working-directory: ./terraform
-        run: terraform validate
+      - name: Terraform Init  # Step to initialize Terraform in the ./terraform directory
+        working-directory: ./terraform  
+        run: terraform init  # Initialize Terraform backend and modules
+
+      - name: Validate Terraform  # Step to validate the Terraform configuration
+        working-directory: ./terraform  
+        run: terraform validate  # Run terraform validate to ensure configuration is correct
   
-      - name: Plan Terraform
-        working-directory: ./terraform
-        run: terraform plan
-      
+      - name: Plan Terraform  # Step to create an execution plan
+        working-directory: ./terraform  
+        run: terraform plan  # Generate and display the execution plan
 
   manual-approval:
-    name: Manual Approval for Apply
-    runs-on: ubuntu-latest
-    needs: terraform
-    environment: dev
+    name: Manual Approval for Apply  # Job for manual approval before applying the changes
+    runs-on: ubuntu-latest  
+    needs: terraform  # This job will wait until the 'terraform' job is completed
+    environment: dev  # Specifies the environment requiring approval (e.g., development)
     steps:
-      - name: Wait for Approval
-        run: echo "Waiting for manual approval before applying Terraform changes."
+      - name: Wait for Approval  # Step to wait for manual approval
+        run: echo "Waiting for manual approval before applying Terraform changes."  # Display a message for manual approval
 
   apply:
-    name: Apply Terraform Plan
-    runs-on: ubuntu-latest
-    needs: manual-approval
-     
+    name: Apply Terraform Plan  # Job to apply the Terraform plan after approval
+    runs-on: ubuntu-latest 
+    needs: manual-approval  # Wait until the 'manual-approval' job is completed
+
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+      - name: Checkout Code  # Step to check out the repository code again
+        uses: actions/checkout@v3  # Action to check out the code
 
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v2
+      - name: Set up Terraform  # Step to set up Terraform CLI again
+        uses: hashicorp/setup-terraform@v2  # HashiCorp's action to set up Terraform
       
-      - name: Terraform Init
+      - name: Terraform Init  # Step to initialize Terraform again in the ./terraform directory
         working-directory: ./terraform  
-        run: terraform init
+        run: terraform init  # Initialize Terraform backend and modules
 
-      - name: Validate Terraform
+      - name: Validate Terraform  # Step to validate the Terraform configuration again
         working-directory: ./terraform
-        run: terraform validate
+        run: terraform validate  # Run terraform validate to ensure configuration is correct
   
-      - name: Plan Terraform
+      - name: Plan Terraform  # Step to create the plan again (optional)
         working-directory: ./terraform
-        run: terraform plan
+        run: terraform plan  # Generate and display the execution plan
 
-      - name: Apply Terraform
+      - name: Apply Terraform  # Step to apply the plan
         working-directory: ./terraform
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve  # Apply the Terraform configuration without requiring manual approval at this stage
