@@ -84,14 +84,17 @@ jobs:
             cd ../terraform/
             echo "$(pwd)"
             ls
-
+        # Step to create the ZIP file for static website
+      - name: Create static website ZIP
+        working-directory: ./digiclock
+        run: zip -r static-website.zip index.html script.js style.css
 
     # Upload the ZIP file as an artifact
       - name: Upload static website artifact
         uses: actions/upload-artifact@v3
         with:
          name: static-website
-         path: ../terraform/static-website.zip
+         path: ./digiclock/static-website.zip
    
       #- name: Apply Terraform  # Step to apply the plan
       #  working-directory: ./terraform
