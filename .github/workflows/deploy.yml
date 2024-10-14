@@ -25,7 +25,7 @@ jobs:
       - name: Prepare ZIP of Static Website
         run: |
             echo "$(pwd)"
-            md $(pwd)/website
+            mkdir $(pwd)/website
             cp ./digiclock/* $(pwd)/website
             cd $(pwd)/website
             zip -r static-website.zip index.html script.js style.css  # Create ZIP
