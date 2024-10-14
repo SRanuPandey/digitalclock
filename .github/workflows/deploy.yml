@@ -22,18 +22,7 @@ jobs:
         uses: actions/checkout@v3  # GitHub Action to check out the code from the repository
 
         # Step 3: Create a ZIP file from the static website content 
-      - name: Prepare ZIP of Static Website
-        run: |
-            echo "$(pwd)"
-            mkdir $(pwd)/website
-            cp ./digiclock/* $(pwd)/website
-            cd $(pwd)/website
-            zip -r static-website.zip index.html script.js style.css  # Create ZIP
-            cp $(pwd)/static-website.zip ../terraform/static-website.zip
-            chmod 755 ../terraform/static-website.zip
-            cd ../terraform/
-            echo "$(pwd)"
-            ls
+      
             
       - name: Set up Terraform  # Step to set up Terraform CLI
         uses: hashicorp/setup-terraform@v2  # HashiCorp's action to set up Terraform
@@ -82,6 +71,19 @@ jobs:
       - name: Plan Terraform  # Step to create the plan again (optional)
         working-directory: ./terraform
         run: terraform plan -out=plan  # Generate and display the execution plan
+
+      - name: Prepare ZIP of Static Website
+        run: |
+            echo "$(pwd)"
+            mkdir $(pwd)/website
+            cp ./digiclock/* $(pwd)/website
+            cd $(pwd)/website
+            zip -r static-website.zip index.html script.js style.css  # Create ZIP
+            cp $(pwd)/static-website.zip ../terraform/static-website.zip
+            chmod 755 ../terraform/static-website.zip
+            cd ../terraform/
+            echo "$(pwd)"
+            ls
 
       - name: Apply Terraform  # Step to apply the plan
         working-directory: ./terraform
