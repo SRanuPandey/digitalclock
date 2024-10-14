@@ -15,15 +15,12 @@ jobs:
 
   
   terraform:
-     name: Terraform Deployment  # Name of the job
+     name: Plan  # Name of the job
      runs-on: ubuntu-latest  # The job runs on the latest Ubuntu environment provided by GitHub Actions
      steps:
       - name: Checkout Code  # Step to check out the repository code
         uses: actions/checkout@v3  # GitHub Action to check out the code from the repository
-
-        # Step 3: Create a ZIP file from the static website content 
-      
-            
+                  
       - name: Set up Terraform  # Step to set up Terraform CLI
         uses: hashicorp/setup-terraform@v2  # HashiCorp's action to set up Terraform
 
@@ -40,7 +37,7 @@ jobs:
         run: terraform plan -out=plan  # Generate and display the execution plan
 
   manual-approval:
-    name: Manual Approval for Apply  # Job for manual approval before applying the changes
+    name: Approval for Apply  # Job for manual approval before applying the changes
     runs-on: ubuntu-latest  
     needs: terraform  # This job will wait until the 'terraform' job is completed
     environment: dev  # Specifies the environment requiring approval (e.g., development)
@@ -72,18 +69,7 @@ jobs:
         working-directory: ./terraform
         run: terraform plan -out=plan  # Generate and display the execution plan
 
-      - name: Prepare ZIP of Static Website
-        run: |
-            echo "$(pwd)"
-            mkdir $(pwd)/website
-            cp ./digiclock/* $(pwd)/website
-            cd $(pwd)/website
-            zip -r static-website.zip index.html script.js style.css  # Create ZIP
-            cp $(pwd)/static-website.zip ../terraform/static-website.zip
-            chmod 755 ../terraform/static-website.zip
-            cd ../terraform/
-            echo "$(pwd)"
-            ls
+       
         # Step to create the ZIP file for static website
       - name: Create static website ZIP
         working-directory: ./digiclock
@@ -99,7 +85,10 @@ jobs:
       - name: Apply Terraform  # Step to apply the plan
         working-directory: ./terraform
         run: terraform apply -auto-approve  # Apply the Terraform configuration without requiring manual approval at this stage
-       # Download the ZIP file artifact
+       
+        
+       
+        # Download the ZIP file artifact
       - name: Download static website artifact
         uses: actions/download-artifact@v3
         with:
