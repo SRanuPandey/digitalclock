@@ -95,7 +95,7 @@ resource "azurerm_storage_blob" "website_zip" {
   storage_account_name    = azurerm_storage_account.storage.name
   storage_container_name  = "$web"
   type                    = "Block"
-  source                  = "./terraform/static-website.zip"  # Path to your website ZIP file
+  source                  = "./static-website.zip"  # Path to your website ZIP file
 }
 
 # VM Scale Set
