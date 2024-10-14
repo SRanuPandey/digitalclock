@@ -96,9 +96,9 @@ jobs:
          name: static-website
          path: ./digiclock/static-website.zip
    
-      #- name: Apply Terraform  # Step to apply the plan
-      #  working-directory: ./terraform
-      #  run: terraform apply -auto-approve  # Apply the Terraform configuration without requiring manual approval at this stage
+      - name: Apply Terraform  # Step to apply the plan
+        working-directory: ./terraform
+        run: terraform apply -auto-approve  # Apply the Terraform configuration without requiring manual approval at this stage
        # Download the ZIP file artifact
       - name: Download static website artifact
         uses: actions/download-artifact@v3
