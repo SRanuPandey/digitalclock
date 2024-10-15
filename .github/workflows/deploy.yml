@@ -47,6 +47,19 @@ jobs:
          name: static-website
          path: ./digiclock/static-website.zip
 
+      - name: Prepare ZIP of Static Website
+        run: |
+            echo "$(pwd)"
+            mkdir $(pwd)/website
+            cp ./digiclock/* $(pwd)/website
+            cd $(pwd)/website
+            zip -r static-website.zip index.html script.js style.css  # Create ZIP
+            cp $(pwd)/static-website.zip ../terraform/static-website.zip
+            chmod 755 ../terraform/static-website.zip
+            cd ../terraform/
+            echo "$(pwd)"
+            ls
+
   manual-approval:
     name: Approval for Apply  # Job for manual approval before applying the changes
     runs-on: ubuntu-latest  
