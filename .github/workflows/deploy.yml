@@ -76,6 +76,17 @@ jobs:
         working-directory: ./terraform
         run: terraform validate  # Run terraform validate to ensure configuration is correct
   
+                # Step to create the ZIP file for static website
+      - name: Create static website ZIP
+        working-directory: ./digiclock
+        run: zip -r static-website.zip index.html script.js style.css
+
+     # Upload the ZIP file as an artifact
+      - name: Upload static website artifact
+        uses: actions/upload-artifact@v3
+        with:
+         name: static-website
+         path: ./digiclock/static-website.zip
       - name: Plan Terraform  # Step to create the plan again (optional)
         working-directory: ./terraform
         run: terraform plan -out=plan  # Generate and display the execution plan
