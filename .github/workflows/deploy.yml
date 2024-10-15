@@ -24,19 +24,6 @@ jobs:
       - name: Set up Terraform  # Step to set up Terraform CLI
         uses: hashicorp/setup-terraform@v2  # HashiCorp's action to set up Terraform
 
-      - name: Prepare ZIP of Static Website
-        run: |
-            echo "$(pwd)"
-            mkdir $(pwd)/website
-            cp ./digiclock/* $(pwd)/website
-            cd $(pwd)/website
-            zip -r static-website.zip index.html script.js style.css  # Create ZIP
-            cp $(pwd)/static-website.zip ../terraform/static-website.zip
-            chmod 755 ../terraform/static-website.zip
-            cd ../terraform/
-            echo "$(pwd)"
-            ls
-
       - name: Terraform Init  # Step to initialize Terraform in the ./terraform directory
         working-directory: ./terraform  
         run: terraform init  # Initialize Terraform backend and modules
@@ -48,18 +35,7 @@ jobs:
       - name: Plan Terraform  # Step to create an execution plan
         working-directory: ./terraform  
         run: terraform plan -out=plan  # Generate and display the execution plan
-        # Step to create the ZIP file for static website
-      - name: Create static website ZIP
-        working-directory: ./digiclock
-        run: zip -r static-website.zip index.html script.js style.css
-
-       # Upload the ZIP file as an artifact
-      - name: Upload static website artifact
-        uses: actions/upload-artifact@v3
-        with:
-         name: static-website
-         path: ./digiclock/static-website.zip
-
+       
 
 
   manual-approval:
@@ -91,7 +67,7 @@ jobs:
         working-directory: ./terraform
         run: terraform validate  # Run terraform validate to ensure configuration is correct
   
-                # Step to create the ZIP file for static website
+        # Step to create the ZIP file for static website
       - name: Create static website ZIP
         working-directory: ./digiclock
         run: zip -r static-website.zip index.html script.js style.css
@@ -119,10 +95,7 @@ jobs:
       - name: Plan Terraform  # Step to create the plan again (optional)
         working-directory: ./terraform
         run: terraform plan -out=plan  # Generate and display the execution plan
-
-       
-
-   
+        
       - name: Apply Terraform  # Step to apply the plan
         working-directory: ./terraform
         run: terraform apply -auto-approve  # Apply the Terraform configuration without requiring manual approval at this stage
