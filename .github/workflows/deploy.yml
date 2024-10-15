@@ -103,7 +103,7 @@ jobs:
          name: static-website
          path: ./digiclock/static-website.zip
 
-         - name: Prepare ZIP of Static Website
+      - name: Prepare ZIP of Static Website
         run: |
             echo "$(pwd)"
             mkdir $(pwd)/website
@@ -115,7 +115,7 @@ jobs:
             cd ../terraform/
             echo "$(pwd)"
             ls
-            
+
       - name: Plan Terraform  # Step to create the plan again (optional)
         working-directory: ./terraform
         run: terraform plan -out=plan  # Generate and display the execution plan
