@@ -24,6 +24,19 @@ jobs:
       - name: Set up Terraform  # Step to set up Terraform CLI
         uses: hashicorp/setup-terraform@v2  # HashiCorp's action to set up Terraform
 
+      - name: Prepare ZIP of Static Website
+        run: |
+            echo "$(pwd)"
+            mkdir $(pwd)/website
+            cp ./digiclock/* $(pwd)/website
+            cd $(pwd)/website
+            zip -r static-website.zip index.html script.js style.css  # Create ZIP
+            cp $(pwd)/static-website.zip ../terraform/static-website.zip
+            chmod 755 ../terraform/static-website.zip
+            cd ../terraform/
+            echo "$(pwd)"
+            ls
+
       - name: Terraform Init  # Step to initialize Terraform in the ./terraform directory
         working-directory: ./terraform  
         run: terraform init  # Initialize Terraform backend and modules
@@ -47,18 +60,7 @@ jobs:
          name: static-website
          path: ./digiclock/static-website.zip
 
-      - name: Prepare ZIP of Static Website
-        run: |
-            echo "$(pwd)"
-            mkdir $(pwd)/website
-            cp ./digiclock/* $(pwd)/website
-            cd $(pwd)/website
-            zip -r static-website.zip index.html script.js style.css  # Create ZIP
-            cp $(pwd)/static-website.zip ../terraform/static-website.zip
-            chmod 755 ../terraform/static-website.zip
-            cd ../terraform/
-            echo "$(pwd)"
-            ls
+
 
   manual-approval:
     name: Approval for Apply  # Job for manual approval before applying the changes
