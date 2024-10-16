@@ -143,7 +143,7 @@ resource "azurerm_subnet" "appgw_subnet" {
   address_prefixes     = ["10.0.0.0/24"]  # Ensure this subnet doesn't overlap with others
 }
 
-# Application Gateway
+
 # Application Gateway
 resource "azurerm_application_gateway" "appgw" {
   name                = "appgw-digiclock"
