@@ -25,9 +25,9 @@ setInterval(()=> {
       hrs = 12;
   }
   if (hrs < 12) {
-      AMPM.innerHTML = "PM";
-  } else {
       AMPM.innerHTML = "AM";
+  } else {
+      AMPM.innerHTML = "PM";
   }
   hours.innerHTML = hrs;
   minutes.innerHTML = min;
